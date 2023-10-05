@@ -3,5 +3,5 @@ const serviceAccount = require("../serviceAccount.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
-const auth = admin.auth()
-module.exports = auth;
+const firebaseDb = admin.firestore()
+module.exports = { firebaseDb };
