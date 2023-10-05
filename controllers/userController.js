@@ -1,4 +1,5 @@
-const { auth, storage } = require('firebase-admin');
+const { auth } = require('firebase-admin');
+const { uploadProfilePhoto } = require("../helper/helperFunctions")
 const { fireStore } = require("../config/firebaseConfig");
 const signUp = async (req, res) => {
   const { email, password, confirmPassword, address, firstName, lastName, profileImage } = req.body;
@@ -18,10 +19,6 @@ const signUp = async (req, res) => {
       address,
       lastName,
     });
-    const uploadProfilePhoto = async (file, filename) => {
-      const storageBucket = storage().bucket();
-      return storageBucket.upload(file, { destination: filename })
-    }
     const date = Date.now()
     const profileImageFileName = `${date}${profileImage}`;
     await uploadProfilePhoto(profileImage, profileImageFileName)
