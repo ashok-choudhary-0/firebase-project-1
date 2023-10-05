@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
-const signup = async (req, res) => {
-  const {email, password} = req.body;
+const signUp = async (req, res) => {
+  const { email, password } = req.body;
   if (!email || !password) {
     res.status(404).send({ message: "Please fill all the required fields" })
   }
@@ -14,4 +14,4 @@ const signup = async (req, res) => {
     res.status(500).send(err.message)
   }
 }
-module.exports = { signup }
+module.exports = { signUp }
