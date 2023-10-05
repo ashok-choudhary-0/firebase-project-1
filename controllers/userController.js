@@ -1,4 +1,4 @@
-const admin = require('firebase-admin');
+const { auth, storage } = require('firebase-admin');
 const { fireStore } = require("../config/firebaseConfig");
 const signUp = async (req, res) => {
   const { email, password, confirmPassword, address, firstName, lastName, profileImage } = req.body;
@@ -9,7 +9,7 @@ const signUp = async (req, res) => {
     res.status(401).send({ message: "Password and confirmPassword should be same" })
   }
   try {
-    const user = await admin.auth().createUser({
+    const user = await auth().createUser({
       email,
       password,
     });
@@ -17,8 +17,14 @@ const signUp = async (req, res) => {
       firstName,
       address,
       lastName,
-      profileImage
     });
+    const uploadProfilePhoto = async (file, filename) => {
+      const storageBucket = storage().bucket();
+      return storageBucket.upload(file, { destination: filename })
+    }
+    const date = Date.now()
+    const profileImageFileName = `${date}${profileImage}`;
+    await uploadProfilePhoto(profileImage, profileImageFileName)
     res.status(200).send({ message: "Data uploaded successfully ", user })
   } catch (err) {
     res.status(500).send(err.message)
