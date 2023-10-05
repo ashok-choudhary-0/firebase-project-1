@@ -27,4 +27,24 @@ const signUp = async (req, res) => {
     res.status(500).send(err.message)
   }
 }
-module.exports = { signUp }
+const addFriend = async (req, res) => {
+  const { friendsId } = req.body;
+  var { user_id } = req.headers;
+  try {
+    const friendsDocRef = fireStore.collection("friends").doc(user_id);
+    const getFriendsDocument = await friendsDocRef.get();
+    const currentFriends = getFriendsDocument.exists ? getFriendsDocument.data().friends || [] : [];
+    if (currentFriends.includes(friendsId)) {
+      res.status(200).send({ message: "Friend already added in the friends list" })
+      return;
+    }
+    currentFriends.push(friendsId);
+    await fireStore.collection("friends").doc(user_id).set({
+      friends: currentFriends
+    })
+    res.status(200).send({ message: "Friend added successfully" })
+  } catch (err) {
+    res.status(500).send(err.message)
+  }
+}
+module.exports = { signUp, addFriend }
