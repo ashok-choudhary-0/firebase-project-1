@@ -2,6 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 require("dotenv").config();
 const userRoutes = require("./routes/userRoutes")
+const firebase = require("./config/firebaseConfig")
 const port = process.env.port || 5000;
 const app = express();
 app.use(bodyParser.json())
